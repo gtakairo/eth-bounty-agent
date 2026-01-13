@@ -1,0 +1,88 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# API Keys and secrets
+*.key
+*.pem
+secrets/
+credentials/
+
+# Data files
+data/contracts/*.sol
+data/reports/*.json
+data/bugs/*.db
+
+# Logs
+*.log
+logs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Node.js (if using ethers.js)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Foundry
+out/
+cache/
+broadcast/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Vector DB
+chroma/
+*.index
+
+# Temporary files
+tmp/
+temp/
+*.tmp
