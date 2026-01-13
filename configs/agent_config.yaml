@@ -1,0 +1,89 @@
+# AI Agent Configuration
+
+# Three-Strategy Configuration
+strategies:
+  specification_based:
+    enabled: true
+    weight: 0.176  # 17.6% success rate
+    tools:
+      - slither
+      - aderyn
+    checks:
+      - natspec_analysis
+      - access_control
+      - spec_to_code_mapping
+
+  similar_bug_search:
+    enabled: true
+    weight: 0.765  # 76.5% success rate (MOST CRITICAL)
+    vector_db: chromadb
+    embedding_model: text-embedding-3-small
+    similarity_threshold: 0.75
+    top_k: 10
+
+  dynamic_test_generation:
+    enabled: true
+    weight: 0.059  # 5.9% success rate
+    tools:
+      - foundry
+      - echidna
+    fuzz_runs: 1000
+
+# Multi-Agent Architecture
+agents:
+  orchestrator:
+    model: claude-3-5-sonnet-20240620
+    temperature: 0.0
+    max_iterations: 10
+
+  recon:
+    model: claude-3-5-sonnet-20240620
+    temperature: 0.0
+    tasks:
+      - contract_info_gathering
+      - dependency_analysis
+      - past_audit_review
+
+  vuln:
+    model: claude-3-5-sonnet-20240620
+    temperature: 0.0
+    strategies: [specification_based, similar_bug_search, dynamic_test_generation]
+
+  exploit:
+    model: claude-3-5-sonnet-20240620
+    temperature: 0.1
+    tasks:
+      - poc_generation
+      - impact_assessment
+      - attack_scenario_construction
+
+# Vulnerability Database
+knowledge_base:
+  bugs_ethereum_path: data/bugs/bugs_ethereum.json
+  update_frequency: daily
+  sources:
+    - solodit
+    - code4rena
+    - sherlock
+    - immunefi
+
+# Report Generation
+reports:
+  format: markdown
+  platforms:
+    - immunefi
+    - code4rena
+    - sherlock
+  sections:
+    - severity
+    - root_cause
+    - impact
+    - poc
+    - recommendation
+
+# Performance Metrics
+metrics:
+  track_false_positives: true
+  track_duplicates: true
+  track_processing_time: true
+  min_confidence_threshold: 0.7

@@ -1,0 +1,98 @@
+{
+  "metadata": {
+    "version": "0.1.0",
+    "last_updated": "2026-01-13",
+    "total_patterns": 0,
+    "sources": [
+      "Solodit (50,000+ reports)",
+      "Code4rena findings",
+      "Sherlock findings",
+      "Immunefi disclosed bugs",
+      "CVE database"
+    ],
+    "note": "This is a template. Populate with actual vulnerability patterns from Phase 3."
+  },
+  "vulnerabilities": [
+    {
+      "id": "VULN-EXAMPLE-001",
+      "category": "reentrancy",
+      "subcategory": "cross-function",
+      "severity": "critical",
+      "description": "Cross-function reentrancy vulnerability where external call precedes state update",
+      "pattern": {
+        "code_structure": "function A() { externalCall(); } function B() { stateUpdate(); }",
+        "attack_vector": "Reenter function B while function A is executing",
+        "detection_query": "external call followed by state modification in different function"
+      },
+      "examples": [
+        {
+          "source": "Solodit-XYZ-2024",
+          "protocol": "Example Protocol",
+          "code": "// Example vulnerable code\nfunction withdraw() external {\n    (bool success, ) = msg.sender.call{value: balance}(\"\");\n    require(success);\n    balance[msg.sender] = 0; // State update after external call\n}",
+          "explanation": "External call is made before updating state, allowing reentrancy",
+          "fix": "Update state before external call (CEI pattern)",
+          "url": "https://solodit.cyfrin.io/example"
+        }
+      ],
+      "related_cves": ["CVE-2016-XXXX"],
+      "tags": ["reentrancy", "cei-violation", "critical"],
+      "created_at": "2026-01-13",
+      "confidence_score": 0.95
+    },
+    {
+      "id": "VULN-EXAMPLE-002",
+      "category": "access_control",
+      "subcategory": "missing_modifier",
+      "severity": "high",
+      "description": "Critical function missing access control modifier",
+      "pattern": {
+        "code_structure": "function criticalOperation() public { ... }",
+        "attack_vector": "Any user can call privileged function",
+        "detection_query": "public/external function with state-changing logic but no access control"
+      },
+      "examples": [
+        {
+          "source": "Code4rena-ABC-2024",
+          "protocol": "Example DAO",
+          "code": "// Vulnerable\nfunction setGovernor(address newGovernor) public {\n    governor = newGovernor;\n}",
+          "explanation": "Missing onlyOwner or similar modifier allows anyone to change governor",
+          "fix": "Add access control modifier: function setGovernor(address newGovernor) public onlyOwner { ... }",
+          "url": "https://code4rena.com/example"
+        }
+      ],
+      "related_cves": [],
+      "tags": ["access-control", "privilege-escalation", "high"],
+      "created_at": "2026-01-13",
+      "confidence_score": 0.90
+    }
+  ],
+  "categories": {
+    "reentrancy": {
+      "description": "Vulnerabilities related to recursive calls",
+      "subcategories": ["single-function", "cross-function", "read-only"]
+    },
+    "access_control": {
+      "description": "Insufficient or missing access restrictions",
+      "subcategories": ["missing_modifier", "weak_validation", "privilege_escalation"]
+    },
+    "oracle_manipulation": {
+      "description": "Price oracle attacks and manipulation",
+      "subcategories": ["flash_loan", "stale_price", "single_source"]
+    },
+    "arithmetic": {
+      "description": "Integer overflow, underflow, precision loss",
+      "subcategories": ["overflow", "underflow", "division_precision"]
+    },
+    "denial_of_service": {
+      "description": "DoS attacks and gas griefing",
+      "subcategories": ["unbounded_loop", "gas_griefing", "block_stuffing"]
+    }
+  },
+  "severity_levels": {
+    "critical": "Direct loss of funds, protocol takeover",
+    "high": "Significant impact on core functionality",
+    "medium": "Limited impact or requires specific conditions",
+    "low": "Minimal impact or informational",
+    "info": "Best practice violations, no direct security impact"
+  }
+}
